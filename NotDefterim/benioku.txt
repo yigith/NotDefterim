@@ -1,0 +1,3 @@
+﻿https://stackoverflow.com/questions/40696305/how-to-change-the-output-folder-for-migrations-with-asp-net-core
+https://docs.microsoft.com/en-us/ef/core/cli/powershell
+Add-Migration Initial -OutputDir "Data/Migrations"
