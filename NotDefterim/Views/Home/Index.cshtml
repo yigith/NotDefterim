@@ -1,6 +1,9 @@
-﻿@model List<Note>
+﻿@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery antiForgery
+@model List<Note>
 @{
     ViewData["Title"] = "Not Defterim";
+    AntiforgeryTokenSet tokenSet = antiForgery.GetAndStoreTokens(Context);
 }
 
 <a asp-controller="Notlar" asp-action="Yeni" class="btn btn-primary">
@@ -10,33 +13,55 @@
 
 @if (Model.Count == 0)
 {
-    <p>Üzgünüm, henüz not eklenmemiş :(</p>
+    <p class="mt-3">Üzgünüm, henüz notunuz yok.</p>
 }
 else
 {
     <ul class="list-striped list-unstyled mt-3">
         @foreach (Note note in Model)
         {
-        <li class="p-2">
-            <div class="dropdown float-right m-1">
-                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton-@note.Id" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-cog"></i>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-@note.Id">
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-edit edit-menu-icon"></i>
-                        Düzenle
-                    </a>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-trash edit-menu-icon"></i>
-                        Sil 
-                    </a>
+            <li class="p-2 clearfix">
+                <div class="dropdown float-right m-1">
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton-@note.Id" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-@note.Id">
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-edit edit-menu-icon"></i>
+                            Düzenle
+                        </a>
+                        <a class="dropdown-item" href="#" data-sil="@note.Id">
+                            <i class="fas fa-trash edit-menu-icon"></i>
+                            Sil
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <strong>@note.Title</strong><br />
-            @note.Content
-        </li>
+                <strong>@note.Title</strong><br />
+                @note.Content
+            </li>
         }
     </ul>
 }
 
+@section Scripts {
+    <script>
+    $("[data-sil]").click(function () {
+        if (!confirm("Bu notu silmek istediğinize emin misiniz?"))
+            return;
+        var btn = this;
+        var id = $(btn).data("sil"); // this: tıklanan  data-sil değerini al
+
+        $.ajax({
+            type: "post",
+            url: "@Url.Action("Sil", "Notlar")",
+            data: {
+                id: id,
+                @tokenSet.FormFieldName: "@tokenSet.RequestToken"
+            },
+            success: function () {
+                $(btn).closest("li").remove(); // butonu içeren en yakın li elementini sil
+            }
+        });
+    });
+    </script>
+}
