@@ -3,21 +3,39 @@
     ViewData["Title"] = "Not Defterim";
 }
 
-<a asp-controller="Notlar" asp-action="Yeni" class="btn btn-primary">Yeni Not</a>
+<a asp-controller="Notlar" asp-action="Yeni" class="btn btn-primary">
+    <i class="fas fa-plus"></i>
+    Yeni Not
+</a>
 
 @if (Model.Count == 0)
 {
-    <p>I am sorry. There is nothing to show :(</p>
+    <p>Üzgünüm, henüz not eklenmemiş :(</p>
 }
 else
 {
-    <ul>
+    <ul class="list-striped list-unstyled mt-3">
         @foreach (Note note in Model)
         {
-            <li>
-                <strong>@note.Title</strong><br />
-                @note.Content
-            </li>
+        <li class="p-2">
+            <div class="dropdown float-right m-1">
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton-@note.Id" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-@note.Id">
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-edit edit-menu-icon"></i>
+                        Düzenle
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-trash edit-menu-icon"></i>
+                        Sil 
+                    </a>
+                </div>
+            </div>
+            <strong>@note.Title</strong><br />
+            @note.Content
+        </li>
         }
     </ul>
 }
