@@ -59,5 +59,43 @@ namespace NotDefterim.Controllers
 
             return Ok();
         }
+
+        public IActionResult Duzenle(int id)
+        {
+            EditNoteViewModel note = db.Notes
+                .Where(x => x.Id == id && x.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                .Select(x => new EditNoteViewModel
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Content = x.Content
+                })
+                .FirstOrDefault();
+
+            if (note == null)
+                return NotFound();
+
+            return View(note);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Duzenle(EditNoteViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                Note note = db.Notes
+                .Where(x => x.Id == vm.Id && x.AuthorId == User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault();
+
+                if (note == null)
+                    return NotFound();
+
+                note.Title = vm.Title;
+                note.Content = vm.Content;
+                db.SaveChanges();
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
     }
 }

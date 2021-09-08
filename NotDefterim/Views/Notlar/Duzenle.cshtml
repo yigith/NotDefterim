@@ -1,9 +1,10 @@
-﻿@model NewNoteViewModel
-@{ 
-    ViewData["Title"] = "Yeni Not";
+﻿@model EditNoteViewModel
+@{
+    ViewData["Title"] = "Not Düzenle";
 }
-<h1>Yeni Not</h1>
+<h1>Not Düzenle</h1>
 <form method="post">
+    <input type="hidden" asp-for="Id"/>
     <div class="form-group">
         <label asp-for="Title"></label>
         <input asp-for="Title" class="form-control" />
@@ -14,6 +15,6 @@
         <textarea asp-for="Content" class="form-control" rows="6"></textarea>
         <span asp-validation-for="Content" class="text-danger"></span>
     </div>
-    <button class="btn btn-primary">Ekle</button>
+    <button class="btn btn-primary">Kaydet</button>
     <a class="btn btn-danger" asp-controller="Home" asp-action="Index">İptal</a>
 </form>

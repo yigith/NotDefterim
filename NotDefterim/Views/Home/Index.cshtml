@@ -26,7 +26,7 @@ else
                         <i class="fas fa-cog"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-@note.Id">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-controller="Notlar" asp-action="Duzenle" asp-route-id="@note.Id">
                             <i class="fas fa-edit edit-menu-icon"></i>
                             Düzenle
                         </a>
@@ -45,23 +45,24 @@ else
 
 @section Scripts {
     <script>
-    $("[data-sil]").click(function () {
-        if (!confirm("Bu notu silmek istediğinize emin misiniz?"))
-            return;
-        var btn = this;
-        var id = $(btn).data("sil"); // this: tıklanan  data-sil değerini al
+        $("[data-sil]").click(function (event) {
+            event.preventDefault();
+            if (!confirm("Bu notu silmek istediğinize emin misiniz?"))
+                return;
+            var btn = this;
+            var id = $(btn).data("sil"); // this: tıklanan  data-sil değerini al
 
-        $.ajax({
-            type: "post",
-            url: "@Url.Action("Sil", "Notlar")",
-            data: {
-                id: id,
-                @tokenSet.FormFieldName: "@tokenSet.RequestToken"
-            },
-            success: function () {
-                $(btn).closest("li").remove(); // butonu içeren en yakın li elementini sil
-            }
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("Sil", "Notlar")",
+                data: {
+                    id: id,
+                    @tokenSet.FormFieldName: "@tokenSet.RequestToken"
+                },
+                success: function () {
+                    $(btn).closest("li").remove(); // butonu içeren en yakın li elementini sil
+                }
+            });
         });
-    });
     </script>
 }
