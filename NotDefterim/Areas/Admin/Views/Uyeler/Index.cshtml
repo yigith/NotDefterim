@@ -21,7 +21,7 @@
                 <td>@user.Email</td>
                 <td>@user.RegisterationTime</td>
                 <td>
-                    <input type="checkbox" @(aktifMi ? "checked" : "") data-uye-durum-guncelle="@user.Id" />
+                    <input type="checkbox" @(aktifMi ? "checked" : "") data-uye-durum-guncelle="@user.Id" data-bootstrap-switch />
                 </td>
             </tr>
         }
@@ -30,12 +30,20 @@
 
 @section Scripts {
     <script>
-        $("[data-uye-durum-guncelle]").change(function (event) {
-            var chk = this;
-            var seciliMi = $(chk).prop("checked");
-            var uyeId = $(chk).data("uye-durum-guncelle");
-            $.post("@Url.Action("DurumGuncelle", "Uyeler")", { kullaniciId: uyeId, aktifMi: seciliMi }, function (data) {
-                toastr.success("Üye durumu güncellendi.");
+        $("input[data-bootstrap-switch]").each(function () {
+            $(this).bootstrapSwitch({
+                state: $(this).prop('checked'),
+                onText: "Evet",
+                offText: "Hayır",
+                onColor: "success",
+                offColor: "danger",
+                onSwitchChange: function (event, state) {
+                    var chk = this;
+                    var uyeId = $(chk).data("uye-durum-guncelle");
+                    $.post("@Url.Action("DurumGuncelle", "Uyeler")", { kullaniciId: uyeId, aktifMi: state }, function (data) {
+                        toastr.success("Üye durumu güncellendi.");
+                    });
+                }
             });
         });
     </script>
