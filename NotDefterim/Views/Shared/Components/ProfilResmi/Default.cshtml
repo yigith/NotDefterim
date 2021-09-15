@@ -1,0 +1,12 @@
+﻿@model ProfilResmiComponentViewModel
+
+@if (string.IsNullOrEmpty(Model.DosyaAd))
+{
+    <img src="~/img/no-avatar.png" width="@Model.Genislik" height="@Model.Yukseklik" 
+         class="@Model.Sinif" alt="no profile photo" />
+}
+else
+{
+    <img src="~/uploads/@Model.DosyaAd" width="@Model.Genislik" height="@Model.Yukseklik" 
+         class="@Model.Sinif" alt="profile photo" />
+}

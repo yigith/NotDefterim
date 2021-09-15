@@ -1,11 +1,8 @@
 ﻿@page
-@inject UserManager<ApplicationUser> UserManager
 @model IndexModel
 @{
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
-    var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
-    var user = UserManager.Users.First(x => x.Id == userId);
 }
 
 <h4>@ViewData["Title"]</h4>
@@ -27,14 +24,7 @@
         </form>
     </div>
     <div class="col-md-6 text-center">
-        @if (string.IsNullOrEmpty(user.Photo))
-        {
-            <img src="~/img/no-avatar.png" class="border rounded p-1" width="200" height="200" alt="no profile photo" />
-        }
-        else
-        {
-            <img src="~/uploads/@user.Photo" class="border rounded p-1" width="200" height="200" alt="profile photo" />
-        }
+        <vc:profil-resmi genislik="200" yukseklik="200" sinif="rounded border p-1" />
         <br />
         <span>(<a asp-area="" asp-controller="ProfilResmi" asp-action="Index">Resmi Güncelle</a>)</span>
     </div>
