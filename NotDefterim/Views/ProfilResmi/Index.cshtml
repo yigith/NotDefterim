@@ -21,7 +21,9 @@
         else
         {
             <img src="~/uploads/@Model.Foto" width="200" height="200" alt="profile photo" /><br />
-            <span>(<a href="#">Resmi Kaldır</a>)</span>
+            <form asp-controller="ProfilResmi" asp-action="ResmiKaldir" method="post">
+                <button class="btn btn-link">Resmi Kaldır</button>
+            </form>
         }
     </div>
 
@@ -33,4 +35,5 @@
             @Html.ValidationMessage("photo")
         </div>
     </form>
+
 </div>
